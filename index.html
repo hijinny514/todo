@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List 예시</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>📝 할 일 목록</h1>
+    <div class="add-todo">
+        <input type="text" id="todo-input" placeholder="새 할 일을 입력하세요">
+        <button id="add-btn">추가</button>
+    </div>
+    <ul class="todo-list" id="todo-list">
+        <!-- 동적으로 할 일이 추가됩니다 -->
+    </ul>
+    <div id="max-msg" style="display:none; color:#ff6767; text-align:center; margin-top: 1rem;">최대 10개까지만 등록 가능합니다.</div>
+</div>
+<script>
+$(function(){
+    function updateDeleteBtns() {
+        $(".delete-btn").off("click").on("click", function() {
+            $(this).closest("li").remove();
+            checkMax();
+        });
+    }
+    function updateLabelEdit() {
+        $("#todo-list").off("dblclick", "label").on("dblclick", "label", function() {
+            var $label = $(this);
+            var currentText = $label.text();
+            if ($label.hasClass("editing")) return;
+            $label.addClass("editing").hide();
+            var $input = $('<input type="text" class="edit-input">').val(currentText);
+            $label.after($input);
+            $input.focus();
+            function finishEdit() {
+                var newText = $input.val().trim();
+                if (newText) {
+                    $label.text(newText);
+                }
+                $input.remove();
+                $label.removeClass("editing").show();
+            }
+            $input.on("keydown", function(e) {
+                if(e.key==="Enter") finishEdit();
+                if(e.key==="Escape") {
+                    $input.remove();
+                    $label.removeClass("editing").show();
+                }
+            });
+            $input.on("blur", finishEdit);
+        });
+    }
+    function updateCheckboxes() {
+        $(".todo-checkbox").off("change").on("change", function() {
+            if ($(this).is(":checked")) {
+                $(this).siblings("label").addClass("completed");
+            } else {
+                $(this).siblings("label").removeClass("completed");
+            }
+        });
+    }
+    function checkMax(){
+        var cnt = $("#todo-list li").length;
+        if(cnt >= 10){
+            $("#todo-input").prop("disabled", true);
+            $("#add-btn").prop("disabled", true);
+            $("#max-msg").show();
+        }else{
+            $("#todo-input").prop("disabled", false);
+            $("#add-btn").prop("disabled", false);
+            $("#max-msg").hide();
+        }
+    }
+
+    $("#add-btn").on("click", function(){
+        var todoVal = $("#todo-input").val().trim();
+        if (!todoVal) return;
+        if($("#todo-list li").length >= 10) return;
+        var li = $('<li>\
+            <div class="todo-item">\
+                <input type="checkbox" class="todo-checkbox">\
+                <label>'+$("<div>").text(todoVal).html()+'</label>\
+            </div>\
+            <button class="delete-btn">삭제</button>\
+        </li>');
+        $("#todo-list").append(li);
+        $("#todo-input").val("");
+        updateDeleteBtns();
+        updateLabelEdit();
+        updateCheckboxes();
+        checkMax();
+    });
+    $("#todo-input").on("keydown", function(e){
+        if(e.key==="Enter"){
+            $("#add-btn").click();
+        }
+    });
+    updateDeleteBtns();
+    updateLabelEdit();
+    updateCheckboxes();
+    checkMax();
+});
+</script>
+</body>
+</html>
