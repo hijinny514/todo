@@ -5,13 +5,14 @@ body {
     padding: 0;
 }
 .container {
-    width: 100%;
-    max-width: 400px;
+    width: 90%;
+    max-width: 600px;
     margin: 60px auto;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 6px 30px rgba(0,0,0,0.1);
     padding: 2rem 2rem 1.5rem 2rem;
+    box-sizing: border-box;
 }
 h1 {
     text-align: center;
