@@ -20,23 +20,28 @@ h1 {
     margin-bottom: 1.2rem;
 }
 .add-todo {
+    width: 100%;
     display: flex;
     gap: 10px;
     margin-bottom: 1.2rem;
 }
 .add-todo input[type="text"] {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
     padding: 0.6rem;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
 }
 .add-todo button {
+    flex-shrink: 0; /* 버튼 줄어들지 않게 */
+    white-space: nowrap;
+
     background: #5c9efd;
     color: #fff;
     border: none;
     border-radius: 5px;
-    padding: 0.6rem 1.2rem;
+    padding: 0.6rem 1rem;
     font-size: 1rem;
     cursor: pointer;
     transition: background 0.2s;
@@ -48,6 +53,19 @@ h1 {
 .add-todo button:hover:not(:disabled) {
     background: #4076e0;
 }
+
+/* 미디어쿼리 */
+@media (max-width: 320px) {
+    .add-todo {
+        gap: 6px;
+    }
+
+    .add-todo button {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.95rem;
+    }
+}
+
 ul.todo-list {
     list-style: none;
     padding: 0;
